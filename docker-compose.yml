@@ -1,0 +1,209 @@
+services:
+  isaac-sim:
+    container_name: isaacsim450
+    image: nvcr.io/nvidia/isaac-sim:4.5.0
+    environment:
+      - ACCEPT_EULA=Y
+      - PRIVACY_CONSENT=Y
+      - ROS_DOMAIN_ID=0
+      - RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
+      - LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/isaac-sim/exts/isaacsim.ros2.bridge/humble/lib
+      # Fix ROS2 environment for proper network communication
+      - ROS_DISTRO=humble
+      - ROS_VERSION=2
+      - CYCLONEDDS_URI=file:///cyclonedds.xml
+      - CYCLONEDDS_DOMAIN=0
+      # Fix for ECC and memory issues
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=all
+      - DISPLAY=:0
+      - QT_X11_NO_MITSHM=1
+      - __GL_SYNC_TO_VBLANK=0
+      - __GL_THREADED_OPTIMIZATIONS=1
+      # Reduce memory usage
+      - OMNIVERSE_CACHE_SIZE=1024
+      - OMNIVERSE_CACHE_PATH=/tmp/ov_cache
+    entrypoint: bash
+    working_dir: /sim
+    command: ["./isaac_py.sh", "simulation.py", "--mode", "gui"]
+    volumes:
+      - ~/docker/isaac-sim/cache/kit:/isaac-sim/kit/cache:rw
+      - ~/docker/isaac-sim/cache/ov:/root/.cache/ov:rw
+      - ~/docker/isaac-sim/cache/pip:/root/.cache/pip:rw
+      - ~/docker/isaac-sim/cache/glcache:/root/.cache/nvidia/GLCache:rw
+      - ~/docker/isaac-sim/cache/computecache:/root/.nv/ComputeCache:rw
+      - ~/docker/isaac-sim/logs:/root/.nvidia-omniverse/logs:rw
+      - ~/docker/isaac-sim/data:/root/.local/share/ov/data:rw
+      - ~/docker/isaac-sim/documents:/root/Documents:rw
+      - ./lerobot_curobot_sim:/sim:r
+      # Add CycloneDDS configuration for proper network communication
+      - ./cyclonedds.xml:/cyclonedds.xml:r
+      # Add X11 display support
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+    deploy:
+      resources:
+        reservations:
+          devices:
+          - driver: nvidia
+            count: all
+            capabilities: [gpu]
+        limits:
+          memory: 8G
+    network_mode: host
+    ipc: host
+    shm_size: 2gb
+
+  isaac-sim-headless-webrtc:
+    container_name: isaacsim450-headless-webrtc
+    image: nvcr.io/nvidia/isaac-sim:4.5.0
+    environment:
+      - ACCEPT_EULA=Y
+      - PRIVACY_CONSENT=Y
+      - ROS_DOMAIN_ID=0
+      - RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
+      - LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/isaac-sim/exts/isaacsim.ros2.bridge/humble/lib
+      # Fix ROS2 environment for proper network communication
+      - ROS_DISTRO=humble
+      - ROS_VERSION=2
+      - CYCLONEDDS_URI=file:///cyclonedds.xml
+      - CYCLONEDDS_DOMAIN=0
+      # WebRTC headless settings
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=all
+      # WebRTC streaming settings
+      - OMNIVERSE_CACHE_SIZE=1024
+      - OMNIVERSE_CACHE_PATH=/tmp/ov_cache
+      # Enable streaming but keep headless
+      - DISPLAY=:0
+      - __GL_SYNC_TO_VBLANK=0
+      - __GL_THREADED_OPTIMIZATIONS=1
+    entrypoint: bash
+    working_dir: /sim
+    command: ["./isaac_py.sh", "simulation.py", "--mode", "webrtc"]
+    volumes:
+      - ~/docker/isaac-sim/cache/kit:/isaac-sim/kit/cache:rw
+      - ~/docker/isaac-sim/cache/ov:/root/.cache/ov:rw
+      - ~/docker/isaac-sim/cache/pip:/root/.cache/pip:rw
+      - ~/docker/isaac-sim/cache/glcache:/root/.cache/nvidia/GLCache:rw
+      - ~/docker/isaac-sim/cache/computecache:/root/.nv/ComputeCache:rw
+      - ~/docker/isaac-sim/logs:/root/.nvidia-omniverse/logs:rw
+      - ~/docker/isaac-sim/data:/root/.local/share/ov/data:rw
+      - ~/docker/isaac-sim/documents:/root/Documents:rw
+      - ./lerobot_curobot_sim:/sim:r
+      # Add CycloneDDS configuration for proper network communication
+      - ./cyclonedds.xml:/cyclonedds.xml:r
+      # Add X11 display support for WebRTC rendering
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+    deploy:
+      resources:
+        reservations:
+          devices:
+          - driver: nvidia
+            count: all
+            capabilities: [gpu]
+        limits:
+          memory: 8G
+    network_mode: host
+    ipc: host
+    shm_size: 2gb
+
+  isaac-sim-gui:
+    container_name: isaacsim450-gui
+    image: nvcr.io/nvidia/isaac-sim:4.5.0
+    environment:
+      - ACCEPT_EULA=Y
+      - PRIVACY_CONSENT=Y
+      - ROS_DOMAIN_ID=0
+      - RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
+      - LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/isaac-sim/exts/isaacsim.ros2.bridge/humble/lib
+      # Fix ROS2 environment for proper network communication
+      - ROS_DISTRO=humble
+      - ROS_VERSION=2
+      - CYCLONEDDS_URI=file:///cyclonedds.xml
+      - CYCLONEDDS_DOMAIN=0
+      # GUI settings without WebRTC
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=all
+      - DISPLAY=:0
+      - QT_X11_NO_MITSHM=1
+      - __GL_SYNC_TO_VBLANK=0
+      - __GL_THREADED_OPTIMIZATIONS=1
+      # Additional X11 settings for remote desktop
+      - QT_GRAPHICSSYSTEM=native
+      - QT_X11_NO_MITSHM=1
+      - QT_X11_NO_XRANDR=1
+      # Optimized settings
+      - OMNIVERSE_CACHE_SIZE=1024
+      - OMNIVERSE_CACHE_PATH=/tmp/ov_cache
+    entrypoint: bash
+    working_dir: /sim
+    command: ["./isaac_py.sh", "simulation.py", "--mode", "gui"]
+    volumes:
+      - ~/docker/isaac-sim/cache/kit:/isaac-sim/kit/cache:rw
+      - ~/docker/isaac-sim/cache/ov:/root/.cache/ov:rw
+      - ~/docker/isaac-sim/cache/pip:/root/.cache/pip:rw
+      - ~/docker/isaac-sim/cache/glcache:/root/.cache/nvidia/GLCache:rw
+      - ~/docker/isaac-sim/cache/computecache:/root/.nv/ComputeCache:rw
+      - ~/docker/isaac-sim/logs:/root/.nvidia-omniverse/logs:rw
+      - ~/docker/isaac-sim/data:/root/.local/share/ov/data:rw
+      - ~/docker/isaac-sim/documents:/root/Documents:rw
+      - ./lerobot_curobot_sim:/sim:r
+      # Add CycloneDDS configuration for proper network communication
+      - ./cyclonedds.xml:/cyclonedds.xml:r
+      # X11 display for GUI
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+    deploy:
+      resources:
+        reservations:
+          devices:
+          - driver: nvidia
+            count: all
+            capabilities: [gpu]
+        limits:
+          memory: 8G
+    network_mode: host  
+    ipc: host
+    shm_size: 2gb
+
+  robostack:
+    container_name: robostack
+    image: robostack:base
+    build:
+      context: .
+      dockerfile: dockers/robostack/Dockerfile
+    stdin_open: true
+    tty: true
+    privileged: true  # Add privileged mode for full device access
+    environment:
+      - ROS_DOMAIN_ID=0
+      - RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
+      - TERM=xterm  # Add terminal type for better keyboard handling
+    # entrypoint: bash
+    working_dir: /ros2_ws
+    volumes:
+      - ./lerobot_curobot_sim/src/curobo_planning_server:/ros2_ws/src/curobo_planning_server:r
+      - ./lerobot_curobot_sim/src/lerobot_curobo_interfaces:/ros2_ws/src/lerobot_curobo_interfaces:r
+      - ./lerobot_curobot_sim/src/lerobot_description:/ros2_ws/src/lerobot_description:r
+      - ./lerobot_curobot_sim/src/joystick_controller:/ros2_ws/src/joystick_controller:r
+      - ./lerobot_curobot_sim/isaac_assets:/ros2_ws/isaac_assets:r
+      - ./lerobot_curobot_sim/launch_curobo.sh:/ros2_ws/launch_curobo.sh:r
+      - /dev/tty0:/dev/tty0:rw  # Map TTY device for keyboard input
+    devices:
+      - /dev/tty0:/dev/tty0  # Map TTY device
+    deploy:
+      resources:
+        reservations:
+          devices:
+          - driver: nvidia
+            count: all
+            capabilities: [gpu]
+    network_mode: host
+    ipc: host
+
+  mpc-demo:
+    extends: robostack
+    command: bash -c "./launch_curobo.sh mpc"
+  
+  motion-gen-demo:
+    extends: robostack
+    command: bash -c "./launch_curobo.sh motion_gen"
