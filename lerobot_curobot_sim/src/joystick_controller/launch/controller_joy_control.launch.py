@@ -10,8 +10,8 @@ def generate_launch_description():
             name='joy_node',
             parameters=[{
                 'device_id': 0,
-                'deadzone': 0.1,
-                'autorepeat_rate': 20.0,
+                'deadzone': 0.05,
+                'autorepeat_rate': 50.0,
             }]
         ),
         

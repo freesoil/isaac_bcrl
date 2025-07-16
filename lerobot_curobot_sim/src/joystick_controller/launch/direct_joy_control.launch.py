@@ -10,8 +10,8 @@ def generate_launch_description():
             name='joy_node',
             parameters=[{
                 'device_id': 0,
-                'deadzone': 0.1,
-                'autorepeat_rate': 20.0,
+                'deadzone': 0.05,
+                'autorepeat_rate': 50.0,
             }]
         ),
         
@@ -23,7 +23,7 @@ def generate_launch_description():
             parameters=[{
                 'use_direct_control': True,  # Flag to indicate direct joint control
                 'publish_rate': 100.0,  # Hz
-                'max_joint_velocity': 1.0,  # rad/s
+                'max_joint_velocity': 3.0,  # rad/s
                 'joint_names': [
                     'Rotation', 'Pitch', 'Elbow', 
                     'Wrist_Pitch', 'Wrist_Roll', 'Jaw'
