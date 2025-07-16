@@ -1,0 +1,1 @@
+/home/beable/BCRL/isaac_bcrl/lerobot_curobot_sim/src/joystick_controller/launch/keyboard_joy.launch.py

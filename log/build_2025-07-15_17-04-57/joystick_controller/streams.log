@@ -1,0 +1,46 @@
+[0.676s] Invoking command in '/home/beable/BCRL/isaac_bcrl/lerobot_curobot_sim/src/joystick_controller': PYTHONPATH=/home/beable/BCRL/isaac_bcrl/build/joystick_controller/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/beable/BCRL/isaac_bcrl/install/joystick_controller/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../../build/joystick_controller build --build-base /home/beable/BCRL/isaac_bcrl/build/joystick_controller/build install --record /home/beable/BCRL/isaac_bcrl/build/joystick_controller/install.log --single-version-externally-managed install_data
+[0.927s] running egg_info
+[0.928s] creating ../../../build/joystick_controller/joystick_controller.egg-info
+[0.928s] writing ../../../build/joystick_controller/joystick_controller.egg-info/PKG-INFO
+[0.928s] writing dependency_links to ../../../build/joystick_controller/joystick_controller.egg-info/dependency_links.txt
+[0.928s] writing entry points to ../../../build/joystick_controller/joystick_controller.egg-info/entry_points.txt
+[0.928s] writing requirements to ../../../build/joystick_controller/joystick_controller.egg-info/requires.txt
+[0.928s] writing top-level names to ../../../build/joystick_controller/joystick_controller.egg-info/top_level.txt
+[0.929s] writing manifest file '../../../build/joystick_controller/joystick_controller.egg-info/SOURCES.txt'
+[0.930s] reading manifest file '../../../build/joystick_controller/joystick_controller.egg-info/SOURCES.txt'
+[0.931s] writing manifest file '../../../build/joystick_controller/joystick_controller.egg-info/SOURCES.txt'
+[0.931s] running build
+[0.931s] running build_py
+[0.931s] creating /home/beable/BCRL/isaac_bcrl/build/joystick_controller/build
+[0.931s] creating /home/beable/BCRL/isaac_bcrl/build/joystick_controller/build/lib
+[0.931s] creating /home/beable/BCRL/isaac_bcrl/build/joystick_controller/build/lib/joystick_controller
+[0.931s] copying joystick_controller/keyboard_joystick.py -> /home/beable/BCRL/isaac_bcrl/build/joystick_controller/build/lib/joystick_controller
+[0.931s] copying joystick_controller/joystick_controller.py -> /home/beable/BCRL/isaac_bcrl/build/joystick_controller/build/lib/joystick_controller
+[0.931s] copying joystick_controller/__init__.py -> /home/beable/BCRL/isaac_bcrl/build/joystick_controller/build/lib/joystick_controller
+[0.932s] running install
+[0.932s] running install_lib
+[0.933s] creating /home/beable/BCRL/isaac_bcrl/install/joystick_controller/lib/python3.10/site-packages/joystick_controller
+[0.933s] copying /home/beable/BCRL/isaac_bcrl/build/joystick_controller/build/lib/joystick_controller/keyboard_joystick.py -> /home/beable/BCRL/isaac_bcrl/install/joystick_controller/lib/python3.10/site-packages/joystick_controller
+[0.933s] copying /home/beable/BCRL/isaac_bcrl/build/joystick_controller/build/lib/joystick_controller/joystick_controller.py -> /home/beable/BCRL/isaac_bcrl/install/joystick_controller/lib/python3.10/site-packages/joystick_controller
+[0.933s] copying /home/beable/BCRL/isaac_bcrl/build/joystick_controller/build/lib/joystick_controller/__init__.py -> /home/beable/BCRL/isaac_bcrl/install/joystick_controller/lib/python3.10/site-packages/joystick_controller
+[0.934s] byte-compiling /home/beable/BCRL/isaac_bcrl/install/joystick_controller/lib/python3.10/site-packages/joystick_controller/keyboard_joystick.py to keyboard_joystick.cpython-310.pyc
+[0.935s] byte-compiling /home/beable/BCRL/isaac_bcrl/install/joystick_controller/lib/python3.10/site-packages/joystick_controller/joystick_controller.py to joystick_controller.cpython-310.pyc
+[0.935s] byte-compiling /home/beable/BCRL/isaac_bcrl/install/joystick_controller/lib/python3.10/site-packages/joystick_controller/__init__.py to __init__.cpython-310.pyc
+[0.936s] running install_data
+[0.936s] creating /home/beable/BCRL/isaac_bcrl/install/joystick_controller/share/ament_index
+[0.936s] creating /home/beable/BCRL/isaac_bcrl/install/joystick_controller/share/ament_index/resource_index
+[0.936s] creating /home/beable/BCRL/isaac_bcrl/install/joystick_controller/share/ament_index/resource_index/packages
+[0.936s] copying resource/joystick_controller -> /home/beable/BCRL/isaac_bcrl/install/joystick_controller/share/ament_index/resource_index/packages
+[0.936s] copying package.xml -> /home/beable/BCRL/isaac_bcrl/install/joystick_controller/share/joystick_controller
+[0.936s] creating /home/beable/BCRL/isaac_bcrl/install/joystick_controller/share/joystick_controller/launch
+[0.936s] copying launch/direct_joy_control.launch.py -> /home/beable/BCRL/isaac_bcrl/install/joystick_controller/share/joystick_controller/launch
+[0.936s] copying launch/controller_joy_control.launch.py -> /home/beable/BCRL/isaac_bcrl/install/joystick_controller/share/joystick_controller/launch
+[0.936s] copying launch/joystick_controller.launch.py -> /home/beable/BCRL/isaac_bcrl/install/joystick_controller/share/joystick_controller/launch
+[0.936s] copying launch/keyboard_joy.launch.py -> /home/beable/BCRL/isaac_bcrl/install/joystick_controller/share/joystick_controller/launch
+[0.936s] running install_egg_info
+[0.938s] Copying ../../../build/joystick_controller/joystick_controller.egg-info to /home/beable/BCRL/isaac_bcrl/install/joystick_controller/lib/python3.10/site-packages/joystick_controller-0.0.1-py3.10.egg-info
+[0.939s] running install_scripts
+[0.959s] Installing joystick_controller_node script to /home/beable/BCRL/isaac_bcrl/install/joystick_controller/bin
+[0.959s] Installing keyboard_joystick script to /home/beable/BCRL/isaac_bcrl/install/joystick_controller/bin
+[0.960s] writing list of installed files to '/home/beable/BCRL/isaac_bcrl/build/joystick_controller/install.log'
+[0.990s] Invoked command in '/home/beable/BCRL/isaac_bcrl/lerobot_curobot_sim/src/joystick_controller' returned '0': PYTHONPATH=/home/beable/BCRL/isaac_bcrl/build/joystick_controller/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/beable/BCRL/isaac_bcrl/install/joystick_controller/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../../build/joystick_controller build --build-base /home/beable/BCRL/isaac_bcrl/build/joystick_controller/build install --record /home/beable/BCRL/isaac_bcrl/build/joystick_controller/install.log --single-version-externally-managed install_data

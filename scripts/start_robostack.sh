@@ -32,19 +32,35 @@ check_and_start_robostack() {
     fi
 }
 
+# --- NEW: ensure executables exist where ROS2 expects them --------------------
+ensure_libexec_symlinks() {
+    # Inside the container, ROS 2 expects executables to live in
+    # /ros2_ws/install/joystick_controller/lib/joystick_controller/
+    # Some environments (e.g. pip install) place them in the bin/ directory
+    # instead.  If that happens, launches will fail with:
+    #   "libexec directory '/ros2_ws/install/joystick_controller/lib/joystick_controller' does not exist"
+    # This helper checks for that case and creates symlinks so launches work
+    # regardless of where the scripts were installed.
+    docker compose exec robostack bash -c "\
+        if [ -d /ros2_ws/install/joystick_controller ] && \
+           [ ! -d /ros2_ws/install/joystick_controller/lib/joystick_controller ]; then \
+           echo '# Creating missing libexec directory for joystick_controller'; \
+           mkdir -p /ros2_ws/install/joystick_controller/lib/joystick_controller; \
+           for f in /ros2_ws/install/joystick_controller/bin/*; do \
+               ln -sf \$f /ros2_ws/install/joystick_controller/lib/joystick_controller/\$(basename \$f); \
+           done; \
+        fi"
+}
+
 build_joystick_controller() {
-    # Check if joystick controller is built
-    echo -e "${YELLOW}Checking if joystick controller is built...${NC}"
-    if ! docker compose exec robostack bash -c "test -d /ros2_ws/install/joystick_controller"; then
-        echo -e "${YELLOW}Building joystick controller...${NC}"
-        docker compose exec robostack bash -c "cd /ros2_ws && colcon build --packages-select joystick_controller"
+    echo -e "${YELLOW}Building (or rebuilding) joystick controller package...${NC}"
+    docker compose exec robostack bash -c "cd /ros2_ws && colcon build --packages-select joystick_controller --symlink-install"
         if [ $? -ne 0 ]; then
             echo -e "${RED}Failed to build joystick controller${NC}"
             exit 1
         fi
-    else
-        echo -e "${GREEN}Joystick controller already built${NC}"
-    fi
+    # Ensure executables are where ROS2 expects them
+    ensure_libexec_symlinks
 }
 
 case $choice in
@@ -68,7 +84,7 @@ case $choice in
         echo ""
         
         # Run the direct joint control mode
-        docker compose exec robostack bash -c "cd /ros2_ws && source install/setup.bash && ros2 launch joystick_controller direct_joy_control.launch.py"
+        docker compose exec -it robostack bash -c "cd /ros2_ws && source install/setup.bash && ros2 launch joystick_controller direct_joy_control.launch.py"
         ;;
     2)
         echo -e "${YELLOW}Starting controller-based joint control with joystick...${NC}"
@@ -90,7 +106,7 @@ case $choice in
         echo ""
         
         # Run the controller-based joint control mode
-        docker compose exec robostack bash -c "cd /ros2_ws && source install/setup.bash && ros2 launch joystick_controller controller_joy_control.launch.py"
+        docker compose exec -it robostack bash -c "cd /ros2_ws && source install/setup.bash && ros2 launch joystick_controller controller_joy_control.launch.py"
         ;;
     3)
         echo -e "${YELLOW}Starting keyboard control...${NC}"
@@ -110,8 +126,9 @@ case $choice in
         echo -e "${YELLOW}Press Ctrl+C to stop${NC}"
         echo ""
         
-        # Run the keyboard control
-        docker compose exec robostack bash -c "cd /ros2_ws && source install/setup.bash && ros2 launch joystick_controller keyboard_joy.launch.py"
+        # Run the keyboard control in interactive mode so STDIN attaches to the node
+        # ros2 launch detaches STDIN; ros2 run keeps it, allowing key capture
+        docker compose exec -it robostack bash -c "cd /ros2_ws && source install/setup.bash && ros2 run joystick_controller keyboard_joystick "
         ;;
     4)
         echo -e "${YELLOW}Running MPC demo...${NC}"

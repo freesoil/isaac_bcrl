@@ -16,7 +16,7 @@ services:
       # Fix for ECC and memory issues
       - NVIDIA_VISIBLE_DEVICES=all
       - NVIDIA_DRIVER_CAPABILITIES=all
-      - DISPLAY=:0
+      - DISPLAY=${DISPLAY}
       - QT_X11_NO_MITSHM=1
       - __GL_SYNC_TO_VBLANK=0
       - __GL_THREADED_OPTIMIZATIONS=1
@@ -48,10 +48,10 @@ services:
             count: all
             capabilities: [gpu]
         limits:
-          memory: 8G
+          memory: 20G
     network_mode: host
     ipc: host
-    shm_size: 2gb
+    shm_size: 8gb
 
   isaac-sim-headless-webrtc:
     container_name: isaacsim450-headless-webrtc
@@ -102,10 +102,10 @@ services:
             count: all
             capabilities: [gpu]
         limits:
-          memory: 8G
+          memory: 20G
     network_mode: host
     ipc: host
-    shm_size: 2gb
+    shm_size: 8gb
 
   isaac-sim-gui:
     container_name: isaacsim450-gui
@@ -124,7 +124,7 @@ services:
       # GUI settings without WebRTC
       - NVIDIA_VISIBLE_DEVICES=all
       - NVIDIA_DRIVER_CAPABILITIES=all
-      - DISPLAY=:0
+      - DISPLAY=${DISPLAY}
       - QT_X11_NO_MITSHM=1
       - __GL_SYNC_TO_VBLANK=0
       - __GL_THREADED_OPTIMIZATIONS=1
@@ -160,10 +160,10 @@ services:
             count: all
             capabilities: [gpu]
         limits:
-          memory: 8G
+          memory: 18G
     network_mode: host  
     ipc: host
-    shm_size: 2gb
+    shm_size: 8gb
 
   robostack:
     container_name: robostack
@@ -178,6 +178,7 @@ services:
       - ROS_DOMAIN_ID=0
       - RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
       - TERM=xterm  # Add terminal type for better keyboard handling
+      - CYCLONEDDS_URI=file:///cyclonedds.xml
     # entrypoint: bash
     working_dir: /ros2_ws
     volumes:
@@ -188,7 +189,10 @@ services:
       - ./lerobot_curobot_sim/isaac_assets:/ros2_ws/isaac_assets:r
       - ./lerobot_curobot_sim/launch_curobo.sh:/ros2_ws/launch_curobo.sh:r
       - /dev/tty0:/dev/tty0:rw  # Map TTY device for keyboard input
+      # Ensure DDS config matches Isaac Sim containers for cross-container discovery
+      - ./cyclonedds.xml:/cyclonedds.xml:r
     devices:
+      - /dev/input/js0:/dev/input/js0:rw
       - /dev/tty0:/dev/tty0  # Map TTY device
     deploy:
       resources:

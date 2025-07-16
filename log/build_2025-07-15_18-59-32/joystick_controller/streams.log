@@ -1,0 +1,24 @@
+[0.653s] Invoking command in '/home/beable/BCRL/isaac_bcrl/build/joystick_controller': PYTHONPATH=/home/beable/BCRL/isaac_bcrl/build/joystick_controller/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/beable/BCRL/isaac_bcrl/install/joystick_controller/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /home/beable/BCRL/isaac_bcrl/build/joystick_controller/build --no-deps symlink_data --force
+[0.926s] running develop
+[1.115s] running egg_info
+[1.115s] writing joystick_controller.egg-info/PKG-INFO
+[1.116s] writing dependency_links to joystick_controller.egg-info/dependency_links.txt
+[1.116s] writing entry points to joystick_controller.egg-info/entry_points.txt
+[1.116s] writing requirements to joystick_controller.egg-info/requires.txt
+[1.116s] writing top-level names to joystick_controller.egg-info/top_level.txt
+[1.119s] reading manifest file 'joystick_controller.egg-info/SOURCES.txt'
+[1.119s] writing manifest file 'joystick_controller.egg-info/SOURCES.txt'
+[1.121s] running build_ext
+[1.121s] Creating /home/beable/BCRL/isaac_bcrl/install/joystick_controller/lib/python3.10/site-packages/joystick-controller.egg-link (link to .)
+[1.122s] Installing joystick_controller_node script to /home/beable/BCRL/isaac_bcrl/install/joystick_controller/bin
+[1.122s] Installing keyboard_joystick script to /home/beable/BCRL/isaac_bcrl/install/joystick_controller/bin
+[1.122s] 
+[1.122s] Installed /home/beable/BCRL/isaac_bcrl/build/joystick_controller
+[1.122s] running symlink_data
+[1.123s] symbolically linking /home/beable/BCRL/isaac_bcrl/build/joystick_controller/resource/joystick_controller -> /home/beable/BCRL/isaac_bcrl/install/joystick_controller/share/ament_index/resource_index/packages
+[1.123s] symbolically linking /home/beable/BCRL/isaac_bcrl/build/joystick_controller/package.xml -> /home/beable/BCRL/isaac_bcrl/install/joystick_controller/share/joystick_controller
+[1.123s] symbolically linking /home/beable/BCRL/isaac_bcrl/build/joystick_controller/launch/direct_joy_control.launch.py -> /home/beable/BCRL/isaac_bcrl/install/joystick_controller/share/joystick_controller/launch
+[1.123s] symbolically linking /home/beable/BCRL/isaac_bcrl/build/joystick_controller/launch/controller_joy_control.launch.py -> /home/beable/BCRL/isaac_bcrl/install/joystick_controller/share/joystick_controller/launch
+[1.123s] symbolically linking /home/beable/BCRL/isaac_bcrl/build/joystick_controller/launch/joystick_controller.launch.py -> /home/beable/BCRL/isaac_bcrl/install/joystick_controller/share/joystick_controller/launch
+[1.123s] symbolically linking /home/beable/BCRL/isaac_bcrl/build/joystick_controller/launch/keyboard_joy.launch.py -> /home/beable/BCRL/isaac_bcrl/install/joystick_controller/share/joystick_controller/launch
+[1.167s] Invoked command in '/home/beable/BCRL/isaac_bcrl/build/joystick_controller' returned '0': PYTHONPATH=/home/beable/BCRL/isaac_bcrl/build/joystick_controller/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/beable/BCRL/isaac_bcrl/install/joystick_controller/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /home/beable/BCRL/isaac_bcrl/build/joystick_controller/build --no-deps symlink_data --force

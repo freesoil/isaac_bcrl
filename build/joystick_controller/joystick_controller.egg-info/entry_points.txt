@@ -1,0 +1,4 @@
+[console_scripts]
+joystick_controller_node = joystick_controller.joystick_controller:main
+keyboard_joystick = joystick_controller.keyboard_joystick:main
+

@@ -183,6 +183,10 @@ def setup_extensions(mode):
     """Set up extensions based on mode."""
     # Always enable ROS2 bridge
     extensions.enable_extension("isaacsim.ros2.bridge")
+
+    # Ensure Action Graph UI/ops extension is enabled so pre-built graph
+    # shows up automatically in the Graph Editor window
+    extensions.enable_extension("omni.graph.window.action")
     
     # Enable WebRTC for webrtc mode
     if mode == 'webrtc':
@@ -390,38 +394,66 @@ except Exception as e:
 # Main Action Graph for Joint States and Commands
 MAIN_GRAPH_PATH = "/World/MainActionGraph"
 try:
-    # If a graph is not found, create a new one.
-    if not is_prim_path_valid(MAIN_GRAPH_PATH):
-        (main_graph, _, _, _) = og.Controller.edit(
-            {
-                "graph_path": MAIN_GRAPH_PATH,
-                "evaluator_name": "execution",
-                "pipeline_stage": og.GraphPipelineStage.GRAPH_PIPELINE_STAGE_SIMULATION,
-            },
-            {
-                og.Controller.Keys.CREATE_NODES: [
-                    ("OnTick", "omni.graph.action.OnTick"),
-                    ("IsaacClock", "isaacsim.core.nodes.IsaacReadSimulationTime"),
-                    ("JointStatePublisher", "isaacsim.ros2.bridge.ROS2PublishJointState"),
-                    ("JointCommandSubscriber", "isaacsim.ros2.bridge.ROS2SubscribeJointState"),
-                ],
-                og.Controller.Keys.SET_VALUES: [
-                    ("JointStatePublisher.inputs:topicName", "/isaac_joint_states"),
-                    ("JointStatePublisher.inputs:targetPrim", ROBOT_STAGE_PATH),
-                    ("JointCommandSubscriber.inputs:topicName", "/isaac_joint_commands"),
-                ],
-                og.Controller.Keys.CONNECT: [
-                    ("OnTick.outputs:tick", "JointStatePublisher.inputs:execIn"),
-                    ("IsaacClock.outputs:simulationTime", "JointStatePublisher.inputs:timeStamp"),
-                    ("OnTick.outputs:tick", "JointCommandSubscriber.inputs:execIn"),
-                ]
-            }
-        )
-        print("Main action graph created successfully")
-    else:
-        print("Main action graph already exists")
+    # Always ensure nodes/connections exist (idempotent)
+    (main_graph, _, _, _) = og.Controller.edit(
+        {
+            "graph_path": MAIN_GRAPH_PATH,
+            "evaluator_name": "execution",
+            "pipeline_stage": og.GraphPipelineStage.GRAPH_PIPELINE_STAGE_SIMULATION,
+        },
+        {
+            og.Controller.Keys.CREATE_NODES: [
+                ("OnTick", "omni.graph.action.OnTick"),
+                ("IsaacClock", "isaacsim.core.nodes.IsaacReadSimulationTime"),
+                ("JointStatePublisher", "isaacsim.ros2.bridge.ROS2PublishJointState"),
+                ("JointCommandSubscriber", "isaacsim.ros2.bridge.ROS2SubscribeJointState"),
+                ("ArticController", "isaacsim.core.nodes.IsaacArticulationController"),
+            ],
+            og.Controller.Keys.SET_VALUES: [
+                ("JointStatePublisher.inputs:topicName", "/isaac_joint_states"),
+                ("JointStatePublisher.inputs:targetPrim", ROBOT_STAGE_PATH),
+
+                ("JointCommandSubscriber.inputs:topicName", "/isaac_joint_commands"),
+                ("JointCommandSubscriber.inputs:jointNames",
+                    ["Rotation","Pitch","Elbow","Wrist_Pitch","Wrist_Roll","Jaw"]),
+
+                ("ArticController.inputs:targetPrim", ROBOT_STAGE_PATH),
+                ("ArticController.inputs:robotPath", ROBOT_STAGE_PATH),
+            ],
+            og.Controller.Keys.CONNECT: [
+                ("OnTick.outputs:tick",  "JointStatePublisher.inputs:execIn"),
+                ("IsaacClock.outputs:simulationTime",
+                               "JointStatePublisher.inputs:timeStamp"),
+
+                ("OnTick.outputs:tick",  "JointCommandSubscriber.inputs:execIn"),
+
+                ("OnTick.outputs:tick",  "ArticController.inputs:execIn"),
+                ("JointCommandSubscriber.outputs:positionCommand",
+                               "ArticController.inputs:positionCommand"),
+                ("JointCommandSubscriber.outputs:velocityCommand",
+                               "ArticController.inputs:velocityCommand"),
+                ("JointCommandSubscriber.outputs:effortCommand",
+                               "ArticController.inputs:effortCommand"),
+                ("JointCommandSubscriber.outputs:jointNames",
+                               "ArticController.inputs:jointNames"),
+            ]
+        }
+    )
+    print("Main action graph synced (nodes ensured)")
 except Exception as e:
     print(f"Error setting up main action graph: {e}")
+
+# ---- ensure targetPrim relationship exists ----
+set_target_prims(
+    primPath=MAIN_GRAPH_PATH + "/JointStatePublisher",
+    inputName="inputs:targetPrim",
+    targetPrimPaths=[ROBOT_STAGE_PATH],
+)
+set_target_prims(
+    primPath=MAIN_GRAPH_PATH + "/ArticController",
+    inputName="inputs:targetPrim",
+    targetPrimPaths=[ROBOT_STAGE_PATH],
+)
 
 # Print mode-specific information
 print_controls(mode)

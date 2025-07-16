@@ -7,6 +7,40 @@ import threading
 import sys
 import time
 
+# For non-blocking single-key reading
+import platform
+
+if platform.system() == 'Windows':
+    import msvcrt  # type: ignore
+
+    def get_key(timeout: float = 0.1) -> str:
+        """Return a single key press within *timeout* seconds (Windows)."""
+        start = time.time()
+        while time.time() - start < timeout:
+            if msvcrt.kbhit():
+                ch = msvcrt.getwch()
+                return ch
+            time.sleep(0.01)
+        return ''
+else:
+    import termios
+    import tty
+    import select
+
+    def get_key(timeout: float = 0.1) -> str:
+        """Return a single key press within *timeout* seconds (POSIX)."""
+        fd = sys.stdin.fileno()
+        old_settings = termios.tcgetattr(fd)
+        try:
+            tty.setraw(fd)
+            rlist, _, _ = select.select([fd], [], [], timeout)
+            if rlist:
+                ch = sys.stdin.read(1)
+                return ch
+            return ''
+        finally:
+            termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
+
 class KeyboardJoystick(Node):
     def __init__(self):
         super().__init__('keyboard_joystick')
@@ -66,19 +100,19 @@ class KeyboardJoystick(Node):
         self.get_logger().info('  Ctrl+C - Exit')
         
     def keyboard_input_loop(self):
-        """Handle keyboard input in a separate thread"""
+        """Continuously poll for key presses without requiring Enter."""
         try:
             while self.running:
-                try:
-                    # Use simple input() instead of raw terminal access
-                    key = input().lower()
+                key = get_key(0.05).lower()
+
+                if not key:
+                    continue  # no key press this cycle
                     
-                    if key == '\x03' or key == 'q':  # Ctrl+C or 'q'
+                if key == '\x03':  # Ctrl+C
                         self.running = False
                         break
                     
-                    # Handle single character inputs
-                    if len(key) == 1 and key in self.key_mappings:
+                if key in self.key_mappings:
                         axis_or_button, value = self.key_mappings[key]
                         
                         if isinstance(value, float):  # Axis control
@@ -87,18 +121,11 @@ class KeyboardJoystick(Node):
                             if key == 'f':  # Toggle fine control
                                 self.fine_control = not self.fine_control
                                 self.sensitivity = 0.3 if self.fine_control else 1.0
-                                self.get_logger().info(f'Fine control: {"ON" if self.fine_control else "OFF"}')
+                                self.get_logger().info(
+                                    f'Fine control: {"ON" if self.fine_control else "OFF"}'
+                                )
                             else:
                                 self.buttons[axis_or_button] = value
-                    
-                    # Reset axes when key is released (simplified)
-                    time.sleep(0.05)  # Small delay
-                    
-                except EOFError:
-                    # Handle EOF (Ctrl+D)
-                    self.running = False
-                    break
-                    
         except Exception as e:
             self.get_logger().error(f'Keyboard input error: {e}')
     
@@ -116,6 +143,10 @@ class KeyboardJoystick(Node):
                 self.axes[i] *= 0.8  # Gradual decay
             else:
                 self.axes[i] = 0.0
+
+        # After publishing, reset button presses (momentary)
+        for i in range(len(self.buttons)):
+            self.buttons[i] = 0
 
 def main(args=None):
     rclpy.init(args=args)

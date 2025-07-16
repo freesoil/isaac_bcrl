@@ -1,0 +1,22 @@
+[0.620s] Invoking command in '/home/beable/BCRL/isaac_bcrl/lerobot_curobot_sim/src/joystick_controller': PYTHONPATH=/home/beable/BCRL/isaac_bcrl/build/joystick_controller/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/beable/BCRL/isaac_bcrl/install/joystick_controller/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../../build/joystick_controller build --build-base /home/beable/BCRL/isaac_bcrl/build/joystick_controller/build install --record /home/beable/BCRL/isaac_bcrl/build/joystick_controller/install.log --single-version-externally-managed install_data
+[0.854s] running egg_info
+[0.854s] writing ../../../build/joystick_controller/joystick_controller.egg-info/PKG-INFO
+[0.855s] writing dependency_links to ../../../build/joystick_controller/joystick_controller.egg-info/dependency_links.txt
+[0.855s] writing entry points to ../../../build/joystick_controller/joystick_controller.egg-info/entry_points.txt
+[0.855s] writing requirements to ../../../build/joystick_controller/joystick_controller.egg-info/requires.txt
+[0.855s] writing top-level names to ../../../build/joystick_controller/joystick_controller.egg-info/top_level.txt
+[0.857s] reading manifest file '../../../build/joystick_controller/joystick_controller.egg-info/SOURCES.txt'
+[0.858s] writing manifest file '../../../build/joystick_controller/joystick_controller.egg-info/SOURCES.txt'
+[0.858s] running build
+[0.858s] running build_py
+[0.859s] running install
+[0.859s] running install_lib
+[0.860s] running install_data
+[0.861s] running install_egg_info
+[0.862s] removing '/home/beable/BCRL/isaac_bcrl/install/joystick_controller/lib/python3.10/site-packages/joystick_controller-0.0.1-py3.10.egg-info' (and everything under it)
+[0.862s] Copying ../../../build/joystick_controller/joystick_controller.egg-info to /home/beable/BCRL/isaac_bcrl/install/joystick_controller/lib/python3.10/site-packages/joystick_controller-0.0.1-py3.10.egg-info
+[0.863s] running install_scripts
+[0.883s] Installing joystick_controller_node script to /home/beable/BCRL/isaac_bcrl/install/joystick_controller/bin
+[0.883s] Installing keyboard_joystick script to /home/beable/BCRL/isaac_bcrl/install/joystick_controller/bin
+[0.883s] writing list of installed files to '/home/beable/BCRL/isaac_bcrl/build/joystick_controller/install.log'
+[0.909s] Invoked command in '/home/beable/BCRL/isaac_bcrl/lerobot_curobot_sim/src/joystick_controller' returned '0': PYTHONPATH=/home/beable/BCRL/isaac_bcrl/build/joystick_controller/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/beable/BCRL/isaac_bcrl/install/joystick_controller/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../../build/joystick_controller build --build-base /home/beable/BCRL/isaac_bcrl/build/joystick_controller/build install --record /home/beable/BCRL/isaac_bcrl/build/joystick_controller/install.log --single-version-externally-managed install_data
