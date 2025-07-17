@@ -48,22 +48,28 @@ This project provides two main simulation modes to suit different use cases:
 
 ### Robot Control
 
-#### Joystick Controller
-Control the SO-ARM 100 robot using physical joysticks or keyboard:
+#### Robot control (one-command)
+`start_robostack.sh` now hides all build/launch steps.  Run the script and pick:
 
-```bash
-./start_robostack.sh
-# Choose option 1: "Start joystick controller for robot control"
-# Choose option 2: "Start keyboard joystick controller"
+| Choice | What happens |
+|--------|--------------|
+| **1** | Builds `joystick_controller` if needed; starts **joy_node** (`50 Hz`, dead-zone 0.05) and `joystick_controller_node` → publishes `/isaac_joint_commands` directly |
+| **2** | Same as 1 but via `ros2_control` topics |
+| **3** | Starts the built-in keyboard joystick (no joystick required) |
+
+The Isaac Sim container auto-loads the ROS 2 Action Graph, so the robot moves immediately – no manual graph creation required.
+
+**Default keyboard mapping (choice 3)**
+```
+WASD  : Base-Rotation / Shoulder
+IJKL  : Elbow / Wrist-Pitch
+Q E   : Wrist-Roll
+Space : Open gripper   (button 0)
+B     : Close gripper  (button 5)
+R / F : Fine / normal speed
 ```
 
-**Keyboard Controls**:
-- **WASD**: Left stick (Base rotation, Shoulder pitch)
-- **IJKL**: Right stick (Elbow, Wrist pitch)
-- **QE**: Triggers (Wrist roll)
-- **Space**: Button 0 (Gripper toggle)
-- **R**: Button 1 (Reset positions)
-- **F**: Button 2 (Fine control mode)
+To adjust game-pad rate or dead-zone edit `launch/direct_joy_control.launch.py`.
 
 #### Troubleshooting WebRTC
 If you have issues with WebRTC streaming:
